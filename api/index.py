@@ -1,11 +1,70 @@
-from flask import Flask
+from flask import Flask, request, jsonify
+import json
+from supabase import create_client, Client
+import re 
 
 app = Flask(__name__)
 
-@app.route('/')
-def home():
-    return 'Hello, World!'
+url = "https://srzradycoulcpkuintfl.supabase.co"
+key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyenJhZHljb3VsY3BrdWludGZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDI2Njc1ODEsImV4cCI6MjAxODI0MzU4MX0.GHF3XHbwbhhGFu7T4Y_E-tN39ebNCbKW1srbLurp6D0"
+supabase: Client = create_client(url, key)
+
+@app.route('/users.signup',methods=['GET','POST'])
+def api_users_signup():
+    email = request.form.get('email')
+    password = request.form.get('password')
+    
+    print(f"Checking user existence for email: {email}")
+
+    error = False
+    if (not email) or (not re.match(r"[^@]+@[^@]+\.[^@]+", email)):
+        error = False
+        print(f"Error: {error}")
+    
+    if (not error) and ((not password) or (len(password) < 5)):
+        error = 'Provide a password'
+
+    if (not error):
+        response = supabase.table('users').select("*").ilike('email', email).execute()
+        if len(response.data) > 0:
+            error = 'User already exists'
+
+    if (not error):
+       response = supabase.table('users').insert({"email": email, "pass": password}).execute()
+       print(str(response.data))
+       if len(response.data) == 0:
+            error = 'Error creating the user'
+
+    if (error):
+        return jsonify({'status': 500, 'message': error})
+
+    return jsonify({'status': 200, 'message': '', 'data': response.data[0]})
+
+@app.route('/users.login',methods=['GET','POST'])
+def api_users_login():
+    email = request.form.get('email')
+    password = request.form.get('password')
+    error = False
+
+    if (not email) or (len(email) < 5):
+        error = 'Email needs to be valid'
+
+    if (not error) and ((not password) or (len(password) < 5)):
+        error = 'Provide a password'
+
+    if not error:
+        response = supabase.table('users').select("*").ilike('email', email).eq('pass', password).execute()
+        if len(response.data) > 0:
+            return jsonify({'status': 200, 'message': '', 'data': response.data[0]})
+
+    if not error:
+        error = 'Invalid Email or password'
+
+    return jsonify({'status': 500, 'message': error})
 
 @app.route('/about')
 def about():
-    return 'About'
+    return 'About'
+
+if __name__ == "__main__":
+    app.run(debug=True)
