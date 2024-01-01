@@ -61,6 +61,13 @@ def api_users_login():
         error = 'Invalid Email or password'
 
     return jsonify({'status': 500, 'message': error})
+    
+@app.route('/orders', methods=['GET'])
+def api_get_orders():
+
+    orders = supabase.table('orders').select("*").execute().data
+
+    return jsonify({'status': 200, 'message': '', 'data': orders})
 
 @app.route('/about')
 def about():
