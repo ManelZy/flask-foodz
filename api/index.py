@@ -64,10 +64,20 @@ def api_users_login():
     
 @app.route('/orders', methods=['GET'])
 def api_get_orders():
-
     orders = supabase.table('orders').select("*").execute().data
 
-    return jsonify({'status': 200, 'message': '', 'data': orders})
+    # Fetch user details (user_full_name and user_address) for each order
+    orders_with_users = []
+    for order in orders:
+        user_id = order.get('user_id')
+        if user_id:
+            user_response = supabase.table('users').select("user_full_name, user_address").eq('user_id', user_id).limit(1).execute()
+            user_data = user_response.data[0] if user_response.data else None
+            order['user_details'] = user_data
+
+        orders_with_users.append(order)
+
+    return jsonify({'status': 200, 'message': '', 'data': orders_with_users})
 
 @app.route('/about')
 def about():
