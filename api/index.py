@@ -83,6 +83,24 @@ def api_get_orders():
 def api_get_dishes():
     dishes = supabase.table('dishes').select("*").execute().data
     return jsonify({'status': 200, 'message': '', 'data': dishes})
+@app.route('/dishes/<int:dish_id>', methods=['DELETE'])
+def api_delete_dish(dish_id):
+    try:
+        # Check if the dish with the given dish_id exists
+        existing_dish = supabase.table('dishes').select("*").eq('dish_id', dish_id).limit(1).execute()
+        if not existing_dish.data:
+            return jsonify({'status': 404, 'message': 'Dish not found'})
+
+        # Delete the dish
+        response = supabase.table('dishes').delete().eq('dish_id', dish_id).execute()
+
+        if not response.data:
+            return jsonify({'status': 500, 'message': 'Error deleting dish'})
+
+        return jsonify({'status': 200, 'message': 'Dish deleted successfully'})
+    except Exception as e:
+        print(f"Error deleting dish: {e}")
+        return jsonify({'status': 500, 'message': 'Error deleting dish'})
 
 @app.route('/about')
 def about():
