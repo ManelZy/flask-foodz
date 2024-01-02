@@ -78,6 +78,11 @@ def api_get_orders():
         orders_with_users.append(order)
 
     return jsonify({'status': 200, 'message': '', 'data': orders_with_users})
+    
+@app.route('/dishes', methods=['GET'])
+def api_get_dishes():
+    dishes = supabase.table('dishes').select("*").execute().data
+    return jsonify({'status': 200, 'message': '', 'data': dishes})
 
 @app.route('/about')
 def about():
