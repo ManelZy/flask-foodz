@@ -125,8 +125,7 @@ def api_delete_dish(dish_id):
         print(f"Error deleting dish: {e}")
         return jsonify({'status': 500, 'message': 'Error deleting dish'})
         
-
-@app.route('/restaurants.signup', methods=['GET','POST'])
+@app.route('/restaurants.signup', methods=['POST'])
 def api_restaurants_signup():
     try:
         store_name = request.form.get('store_name') 
@@ -147,13 +146,14 @@ def api_restaurants_signup():
 
         print(str(response.data))
         
-        if len(response.data) == 0:
+        if response.status_code == 201:
+            return jsonify({'status': 200, 'message': 'Restaurant created successfully', 'data': response.data[0]})
+        else:
             return jsonify({'status': 500, 'message': 'Error creating the restaurant'})
 
-        return jsonify({'status': 200, 'message': '', 'data': response.data[0]})
     except Exception as e:
         print(f"Error during restaurant signup: {str(e)}")
-        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+        return jsonify({'status': 500, 'message': f'Internal Server Error: {str(e)}'})
 
 @app.route('/about')
 def about():
