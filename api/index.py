@@ -13,10 +13,11 @@ supabase: Client = create_client(url, key)
 @app.route('/users.signup', methods=['POST'])
 def api_users_signup():
     try:
+        user_full_name = request.form.get('user_full_name') 
         email = request.form.get('email')
         password = request.form.get('password')
-        user_address = request.form.get('user_address')  # Add user_address to the request
-        phone_number = request.form.get('phone_number')  # Add phone_number to the request
+        user_address = request.form.get('user_address')  
+        phone_number = request.form.get('phone_number') 
         user_type = request.form.get('user_type', 'owner')  # Default user_type to 'owner'
 
         print(f"Checking user existence for email: {email}")
@@ -40,6 +41,7 @@ def api_users_signup():
         if (not error):
             # Insert the new user with additional information
             response = supabase.table('users').insert({
+                "user_full_name": user_full_name,
                 "email": email,
                 "pass": password,
                 "user_address": user_address,
