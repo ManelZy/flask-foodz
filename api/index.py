@@ -124,37 +124,7 @@ def api_delete_dish(dish_id):
     except Exception as e:
         print(f"Error deleting dish: {e}")
         return jsonify({'status': 500, 'message': 'Error deleting dish'})
-        
-@app.route('/restaurants.signup', methods=['POST'])
-def api_restaurants_signup():
-    try:
-        store_name = request.form.get('store_name') 
-        store_address = request.form.get('store_address')
-        phone_num = request.form.get('phone_num')
-        business = request.form.get('business')
-
-        # Print the information received from the user
-        print(f"Received information - Store Name: {store_name}, Store Address: {store_address}, Phone Number: {phone_num}, Business: {business}")
-
-        # Insert the new restaurant with additional information
-        response = supabase.table('restaurant').insert({
-            "store_name": store_name,
-            "store_address": store_address,
-            "phone_num": phone_num,
-            "business": business,
-        }).execute()
-
-        print(str(response.data))
-        
-        if response.status_code == 201:
-            return jsonify({'status': 200, 'message': 'Restaurant created successfully', 'data': response.data[0]})
-        else:
-            return jsonify({'status': 500, 'message': 'Error creating the restaurant'})
-
-    except Exception as e:
-        print(f"Error during restaurant signup: {str(e)}")
-        return jsonify({'status': 500, 'message': f'Internal Server Error: {str(e)}'})
-
+   
 @app.route('/about')
 def about():
     return 'About'
