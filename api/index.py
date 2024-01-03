@@ -125,6 +125,52 @@ def api_delete_dish(dish_id):
         print(f"Error deleting dish: {e}")
         return jsonify({'status': 500, 'message': 'Error deleting dish'})
    
+@app.route('/restaurants.signup', methods=['POST'])
+def api_users_signup():
+    try:
+        store_name = request.form.get('store_name')
+        store_address = request.form.get('store_address')
+        phone_num = request.form.get('phone_num')  
+        business = request.form.get('business') 
+
+        print(f"Checking user existence for email: {store_name}")
+
+        error = False
+        if (not store_name) or (not re.match(r"[^@]+@[^@]+\.[^@]+", store_name)):
+            error = True
+            print(f"Error: {error}")
+
+     
+
+        if (not error):
+            # Check if the user already exists
+            response = supabase.table('restaurant').select("*").ilike('store_name', store_name).execute()
+            if len(response.data) > 0:
+                error = True
+                print("Error: User already exists")
+
+        if (not error):
+            # Insert the new user with additional information
+            response = supabase.table('restaurant').insert({
+                "store_name": store_name,
+                "store_address": store_address,
+                "phone_num": phone_num,
+                "business": business,
+            }).execute()
+            print(f"Insert response: {response}")
+            print(str(response.data))
+            if len(response.data) == 0:
+                error = True
+                print("Error: Failed to create the user")
+
+        if (error):
+            return jsonify({'status': 500, 'message': 'Error creating the user'})
+
+        return jsonify({'status': 200, 'message': '', 'data': response.data[0]})
+    except Exception as e:
+        print(f"Error during user signup: {str(e)}")
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+
 @app.route('/about')
 def about():
     return 'About'
