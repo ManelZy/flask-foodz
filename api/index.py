@@ -48,6 +48,7 @@ def api_users_signup():
                 "tlf_num": phone_number,
                 "user_type": user_type
             }).execute()
+            print(f"Insert response: {response}")
             print(str(response.data))
             if len(response.data) == 0:
                 error = True
