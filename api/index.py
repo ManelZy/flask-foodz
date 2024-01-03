@@ -126,7 +126,7 @@ def api_delete_dish(dish_id):
         return jsonify({'status': 500, 'message': 'Error deleting dish'})
    
 @app.route('/restaurants.signup', methods=['POST'])
-def api_users_signup():
+def api_restaurant_signup():
     try:
         store_name = request.form.get('store_name')
         store_address = request.form.get('store_address')
