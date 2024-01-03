@@ -125,13 +125,17 @@ def api_delete_dish(dish_id):
         print(f"Error deleting dish: {e}")
         return jsonify({'status': 500, 'message': 'Error deleting dish'})
         
-@app.route('/restaurants.signup', methods=['POST'])
+
+@app.route('/restaurants.signup', methods=['GET','POST'])
 def api_restaurants_signup():
     try:
         store_name = request.form.get('store_name') 
         store_address = request.form.get('store_address')
         phone_num = request.form.get('phone_num')
         business = request.form.get('business')
+
+        # Print the information received from the user
+        print(f"Received information - Store Name: {store_name}, Store Address: {store_address}, Phone Number: {phone_num}, Business: {business}")
 
         # Insert the new restaurant with additional information
         response = supabase.table('restaurant').insert({
