@@ -9,36 +9,55 @@ url = "https://srzradycoulcpkuintfl.supabase.co"
 key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyenJhZHljb3VsY3BrdWludGZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDI2Njc1ODEsImV4cCI6MjAxODI0MzU4MX0.GHF3XHbwbhhGFu7T4Y_E-tN39ebNCbKW1srbLurp6D0"
 supabase: Client = create_client(url, key)
 
-@app.route('/users.signup',methods=['GET','POST'])
+
+@app.route('/users.signup', methods=['POST'])
 def api_users_signup():
-    email = request.form.get('email')
-    password = request.form.get('password')
-    
-    print(f"Checking user existence for email: {email}")
+    try:
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user_address = request.form.get('user_address')  # Add user_address to the request
+        phone_number = request.form.get('phone_number')  # Add phone_number to the request
+        user_type = request.form.get('user_type', 'owner')  # Default user_type to 'owner'
 
-    error = False
-    if (not email) or (not re.match(r"[^@]+@[^@]+\.[^@]+", email)):
+        print(f"Checking user existence for email: {email}")
+
         error = False
-        print(f"Error: {error}")
-    
-    if (not error) and ((not password) or (len(password) < 5)):
-        error = 'Provide a password'
+        if (not email) or (not re.match(r"[^@]+@[^@]+\.[^@]+", email)):
+            error = True
+            print(f"Error: {error}")
 
-    if (not error):
-        response = supabase.table('users').select("*").ilike('email', email).execute()
-        if len(response.data) > 0:
-            error = 'User already exists'
+        if (not error) and ((not password) or (len(password) < 5)):
+            error = True
+            print(f"Error: {error}")
 
-    if (not error):
-       response = supabase.table('users').insert({"email": email, "pass": password}).execute()
-       print(str(response.data))
-       if len(response.data) == 0:
-            error = 'Error creating the user'
+        if (not error):
+            # Check if the user already exists
+            response = supabase.table('users').select("*").ilike('email', email).execute()
+            if len(response.data) > 0:
+                error = True
+                print("Error: User already exists")
 
-    if (error):
-        return jsonify({'status': 500, 'message': error})
+        if (not error):
+            # Insert the new user with additional information
+            response = supabase.table('users').insert({
+                "email": email,
+                "pass": password,
+                "user_address": user_address,
+                "tlf_num": phone_number,
+                "user_type": user_type
+            }).execute()
+            print(str(response.data))
+            if len(response.data) == 0:
+                error = True
+                print("Error: Failed to create the user")
 
-    return jsonify({'status': 200, 'message': '', 'data': response.data[0]})
+        if (error):
+            return jsonify({'status': 500, 'message': 'Error creating the user'})
+
+        return jsonify({'status': 200, 'message': '', 'data': response.data[0]})
+    except Exception as e:
+        print(f"Error during user signup: {str(e)}")
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
 
 @app.route('/users.login',methods=['GET','POST'])
 def api_users_login():
