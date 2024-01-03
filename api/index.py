@@ -82,7 +82,48 @@ def api_users_login():
         error = 'Invalid Email or password'
 
     return jsonify({'status': 500, 'message': error})
-    
+
+@app.route('/restaurants.signup', methods=['POST'])
+def api_restaurants_signup():
+    try:
+        store_name = request.form.get('store_name') 
+        store_address = request.form.get('store_address')
+        phone_num = request.form.get('phone_num')
+        business = request.form.get('business')
+
+        print(f"Checking restaurant existence for store name: {store_name}")
+
+        error = False
+        # Add validation logic for store_name, store_address, phone_num, and business if needed
+
+        if not error:
+            # Check if the restaurant already exists
+            response = supabase.table('restaurant').select("*").ilike('store_name', store_name).execute()
+            if len(response.data) > 0:
+                error = True
+                print("Error: Restaurant already exists")
+
+        if not error:
+            # Insert the new restaurant with additional information
+            response = supabase.table('restaurant').insert({
+                "store_name": store_name,
+                "store_address": store_address,
+                "phone_num": phone_num,
+                "business": business,
+            }).execute()
+            print(str(response.data))
+            if len(response.data) == 0:
+                error = True
+                print("Error: Failed to create the restaurant")
+
+        if error:
+            return jsonify({'status': 500, 'message': 'Error creating the restaurant'})
+
+        return jsonify({'status': 200, 'message': '', 'data': response.data[0]})
+    except Exception as e:
+        print(f"Error during restaurant signup: {str(e)}")
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+
 @app.route('/orders', methods=['GET'])
 def api_get_orders():
     orders = supabase.table('orders').select("*").execute().data
