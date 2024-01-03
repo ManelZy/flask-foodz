@@ -125,7 +125,7 @@ def api_delete_dish(dish_id):
         print(f"Error deleting dish: {e}")
         return jsonify({'status': 500, 'message': 'Error deleting dish'})
         
-@app.route('/restaurants.signup', methods=['POST'])
+@app.route('/restaurants.signup', methods=['GET','POST'])
 def api_restaurants_signup():
     try:
         store_name = request.form.get('store_name') 
