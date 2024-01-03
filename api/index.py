@@ -120,9 +120,10 @@ def api_restaurants_signup():
             return jsonify({'status': 500, 'message': 'Error creating the restaurant'})
 
         return jsonify({'status': 200, 'message': '', 'data': response.data[0]})
-    except Exception as e:
-        print(f"Error during restaurant signup: {str(e)}")
-        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+   except Exception as e:
+    print(f"Error during restaurant signup: {str(e)}")
+    return jsonify({'status': 500, 'message': f'Internal Server Error: {str(e)}'})
+
 
 @app.route('/orders', methods=['GET'])
 def api_get_orders():
