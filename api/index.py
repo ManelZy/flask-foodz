@@ -124,33 +124,7 @@ def api_delete_dish(dish_id):
     except Exception as e:
         print(f"Error deleting dish: {e}")
         return jsonify({'status': 500, 'message': 'Error deleting dish'})
-        
-@app.route('/dishes.add', methods=['POST'])
-def api_add_dish():
-    try:
-        dish_name = request.form.get('dish_name')
-        dish_price = request.form.get('dish_price')
-        dish_desc = request.form.get('dish_desc')
-
-        # Insert the new dish
-        response = supabase.table('dishes').insert({
-            "dish_name": dish_name,
-            "dish_price": dish_price
-            "dish_desc": dish_desc,
-        }).execute()
-
-        print(f"Insert response: {response}")
-
-        if len(response.data) == 0:
-            print("Error: Failed to add the dish")
-            return jsonify({'status': 500, 'message': 'Failed to add the dish'})
-
-        return jsonify({'status': 200, 'message': 'Dish added successfully', 'data': response.data[0]})
-
-    except Exception as e:
-        print(f"Error adding dish: {str(e)}")
-        return jsonify({'status': 500, 'message': 'Internal Server Error'})
-        
+         
 @app.route('/restaurants.signup', methods=['POST'])
 def api_restaurant_signup():
     try:
