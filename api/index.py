@@ -124,7 +124,6 @@ def api_delete_dish(dish_id):
     except Exception as e:
         print(f"Error deleting dish: {e}")
         return jsonify({'status': 500, 'message': 'Error deleting dish'})
-         
 @app.route('/restaurants.signup', methods=['POST'])
 def api_restaurant_signup():
     try:
@@ -152,6 +151,35 @@ def api_restaurant_signup():
     except Exception as e:
         print(f"Error during store signup: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
+
+@app.route('/dishes.add', methods=['POST'])
+def api_dishes_add():
+    try:
+        dish_name = request.form.get('dish_name')
+        dish_desc = request.form.get('dish_desc')
+        dish_price = request.form.get('dish_price')  
+       
+
+        # Insert the new store
+        response = supabase.table('dishes').insert({
+            "dish_name": dish_name,
+            "dish_desc": dish_desc,
+            "dish_price": dish_price,
+           
+        }).execute()
+
+        print(f"Insert response: {response}")
+
+        if len(response.data) == 0:
+            print("Error: Failed to add the dish")
+            return jsonify({'status': 500, 'message': 'Failed to add the dish'})
+
+        return jsonify({'status': 200, 'message': 'dish added successfully', 'data': response.data[0]})
+    
+    except Exception as e:
+        print(f"Error during dish adding: {str(e)}")
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+        
 @app.route('/about')
 def about():
     return 'About'
