@@ -212,7 +212,7 @@ def api_dishes_add():
 @app.route('/categories', methods=['GET'])
 def api_get_categories():
     categories = supabase.table('categories').select("*").execute().data
-    return jsonify({'status': 200, 'message': '', 'data': dishes})
+    return jsonify({'status': 200, 'message': '', 'data': categories})
     
 @app.route('/about')
 def about():
