@@ -213,7 +213,31 @@ def api_dishes_add():
 def api_get_categories():
     categories = supabase.table('categories').select("*").execute().data
     return jsonify({'status': 200, 'message': '', 'data': categories})
+
+@app.route('/categories.add', methods=['POST'])
+def api_categories_add():
+    try:
+        category_name = request.form.get('category_name')
     
+
+        # Insert the new store
+        response = supabase.table('categories').insert({
+            "category_name": category_name,
+            
+        }).execute()
+
+        print(f"Insert response: {response}")
+
+        if len(response.data) == 0:
+            print("Error: Failed to add the category")
+            return jsonify({'status': 500, 'message': 'Failed to add the category'})
+
+        return jsonify({'status': 200, 'message': 'category added successfully', 'data': response.data[0]})
+    
+    except Exception as e:
+        print(f"Error during category adding: {str(e)}")
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+        
 @app.route('/about')
 def about():
     return 'About'
