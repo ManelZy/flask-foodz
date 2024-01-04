@@ -106,6 +106,7 @@ def api_get_orders():
 def api_get_dishes():
     dishes = supabase.table('dishes').select("*").execute().data
     return jsonify({'status': 200, 'message': '', 'data': dishes})
+    
 @app.route('/dishes/<int:dish_id>', methods=['DELETE'])
 def api_delete_dish(dish_id):
     try:
@@ -124,6 +125,34 @@ def api_delete_dish(dish_id):
     except Exception as e:
         print(f"Error deleting dish: {e}")
         return jsonify({'status': 500, 'message': 'Error deleting dish'})
+        
+@app.route('/dishes/<int:dish_id>', methods=['PUT'])
+def api_edit_dish(dish_id):
+    try:
+        # Check if the dish with the given dish_id exists
+        existing_dish = supabase.table('dishes').select("*").eq('dish_id', dish_id).limit(1).execute()
+        if not existing_dish.data:
+            return jsonify({'status': 404, 'message': 'Dish not found'})
+
+        # Get the updated data from the request
+        updated_data = {
+            "dish_name": request.form.get('dish_name'),
+            "dish_desc": request.form.get('dish_desc'),
+            "dish_price": request.form.get('dish_price'),
+            "dish_category": request.form.get('dish_category'),
+        }
+
+        # Update the dish
+        response = supabase.table('dishes').update(updated_data).eq('dish_id', dish_id).execute()
+
+        if not response.data:
+            return jsonify({'status': 500, 'message': 'Error updating dish'})
+
+        return jsonify({'status': 200, 'message': 'Dish updated successfully', 'data': response.data[0]})
+    except Exception as e:
+        print(f"Error updating dish: {e}")
+        return jsonify({'status': 500, 'message': 'Error updating dish'})
+
 @app.route('/restaurants.signup', methods=['POST'])
 def api_restaurant_signup():
     try:
