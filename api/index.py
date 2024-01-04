@@ -208,7 +208,12 @@ def api_dishes_add():
     except Exception as e:
         print(f"Error during dish adding: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
-        
+
+@app.route('/categories', methods=['GET'])
+def api_get_categories():
+    dishes = supabase.table('categories').select("*").execute().data
+    return jsonify({'status': 200, 'message': '', 'data': dishes})
+    
 @app.route('/about')
 def about():
     return 'About'
