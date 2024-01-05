@@ -244,7 +244,7 @@ def api_categories_add():
         print(f"Error during category adding: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
 
-@app.route('/users/<int:user_id>/restaurant_id', methods=['GET'])
+@app.route('/users/<string:user_id>/restaurant_id', methods=['GET'])
 def get_restaurant_id(user_id):
     try:
         # Query the restaurant table to get the corresponding restaurant_id based on user_id
