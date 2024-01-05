@@ -23,9 +23,7 @@ def api_users_signup():
         print(f"Checking user existence for email: {email}")
 
         error = False
-        if (not email) or (not re.match(r"[^@]+@[^@]+\.[^@]+", email)):
-            error = True
-            print(f"Error: {error}")
+      
 
         if (not error) and ((not password) or (len(password) < 5)):
             error = True
