@@ -85,6 +85,21 @@ def api_users_login():
     return jsonify({'status': 500, 'message': error})
 
 
+@app.route('/users/<string:user_id>', methods=['GET'])
+def api_get_user_by_id(user_id):
+    try:
+        # Fetch user details by user_id
+        response = supabase.table('users').select("*").eq('uid', user_id).limit(1).execute()
+
+        if len(response.data) > 0:
+            return jsonify({'status': 200, 'message': '', 'data': response.data[0]})
+        else:
+            return jsonify({'status': 404, 'message': 'User not found'})
+    except Exception as e:
+        print(f"Error fetching user by ID: {str(e)}")
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+
+
 @app.route('/orders', methods=['GET'])
 def api_get_orders():
     orders = supabase.table('orders').select("*").execute().data
