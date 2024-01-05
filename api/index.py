@@ -59,28 +59,29 @@ def api_users_signup():
     except Exception as e:
         print(f"Error during user signup: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
-
-@app.route('/users.login',methods=['GET','POST'])
+        
+@app.route('/users.login', methods=['POST'])
 def api_users_login():
     email = request.form.get('email')
     password = request.form.get('password')
-    error = False
+    error = None
 
-    if (not email) or (len(email) < 5):
+    if not email or len(email) < 5:
         error = 'Email needs to be valid'
 
-    if (not error) and ((not password) or (len(password) < 5)):
+    if not error and (not password or len(password) < 5):
         error = 'Provide a password'
 
     if not error:
         response = supabase.table('users').select("*").ilike('email', email).eq('pass', password).execute()
-        if len(response.data) > 0:
-            return jsonify({'status': 200, 'message': '', 'data': response.data[0]})
+        if response.data:
+            user_data = response.data[0]
+            return jsonify({'status': 200, 'message': 'Login successful', 'data': user_data})
 
     if not error:
         error = 'Invalid Email or password'
 
-    return jsonify({'status': 500, 'message': error})
+    return jsonify({'status': 401, 'message': error, 'data': {}})
 
 
 @app.route('/users/<int:user_id>', methods=['GET'])
