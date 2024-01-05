@@ -86,7 +86,7 @@ def api_users_login():
 
 
 @app.route('/users', methods=['GET'])
-def api_get_dishes():
+def api_get_users():
     dishes = supabase.table('users').select("*").execute().data
     return jsonify({'status': 200, 'message': '', 'data': dishes})
 
