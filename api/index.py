@@ -281,10 +281,7 @@ def api_edit_user(user_id):
             "tlf_num": request.form.get('tlf_num'),
         }
 
-        # Perform data validation
-        if any(value is None or value == '' for value in updated_data.values()):
-            return jsonify({'status': 400, 'message': 'Invalid or missing data'})
-
+       
         # Update the user
         response = supabase.table('users').update(updated_data).eq('user_id', user_id).execute()
 
