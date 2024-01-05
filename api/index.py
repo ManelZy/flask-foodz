@@ -86,10 +86,10 @@ def api_users_login():
 
 
 @app.route('/users/<int:user_id>', methods=['GET'])
-def api_get_users():
-  
-        users = supabase.table('users').select("*").eq('user_id', user_id).limit(1).execute()
-return jsonify({'status': 200, 'message': '', 'data': users})
+def api_get_users(user_id):
+    users = supabase.table('users').select("*").eq('user_id', user_id).limit(1).execute()
+    return jsonify({'status': 200, 'message': '', 'data': users})
+
 
 
 @app.route('/orders', methods=['GET'])
