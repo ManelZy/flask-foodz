@@ -86,18 +86,9 @@ def api_users_login():
 
 
 @app.route('/users', methods=['GET'])
-def api_get_user_by_id():
-    try:
-        # Fetch user details by user_id
-        response = supabase.table('users').select("*").execute().data
-
-        if len(response.data) > 0:
-            return jsonify({'status': 200, 'message': '', 'data': response.data[0]})
-        else:
-            return jsonify({'status': 404, 'message': 'User not found'})
-    except Exception as e:
-        print(f"Error fetching user by ID: {str(e)}")
-        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+def api_get_dishes():
+    dishes = supabase.table('users').select("*").execute().data
+    return jsonify({'status': 200, 'message': '', 'data': dishes})
 
 
 @app.route('/orders', methods=['GET'])
