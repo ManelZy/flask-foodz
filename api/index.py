@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import json
 from supabase import create_client, Client
 import re 
-
+import traceback  
 app = Flask(__name__)
 
 url = "https://srzradycoulcpkuintfl.supabase.co"
@@ -262,10 +262,11 @@ def get_restaurant_id(user_id):
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
         
      
+
 @app.route('/users/<string:user_id>', methods=['PUT'])
 def api_edit_user(user_id):
     try:
-        # Check if the dish with the given dish_id exists
+        # Check if the user with the given user_id exists
         existing_user = supabase.table('users').select("*").eq('user_id', user_id).limit(1).execute()
 
         if not existing_user.data:
@@ -280,8 +281,8 @@ def api_edit_user(user_id):
             "tlf_num": request.form.get('tlf_num'),
         }
 
-        # Perform data validation (you may want to customize this based on your requirements)
-        if any(value is None for value in updated_data.values()):
+        # Perform data validation
+        if any(value is None or value == '' for value in updated_data.values()):
             return jsonify({'status': 400, 'message': 'Invalid or missing data'})
 
         # Update the user
@@ -292,11 +293,10 @@ def api_edit_user(user_id):
 
         return jsonify({'status': 200, 'message': 'User updated successfully', 'data': response.data[0]})
 
-   except Exception as e:
-    print(f"Error updating user: {e}")
-    import traceback
-    traceback.print_exc()
-    return jsonify({'status': 500, 'message': 'Internal Server Error'})
+    except Exception as e:
+        print(f"Error updating user: {e}")
+        traceback.print_exc()
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
 
         
 @app.route('/about')
