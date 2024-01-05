@@ -274,7 +274,7 @@ def api_edit_user(user_id):
         # Get the updated data from the request
         updated_data = {
             "email": request.form.get('email'),
-            "password": request.form.get('password'),
+            "pass": request.form.get('pass'),
             "user_address": request.form.get('user_address'),
             "user_full_name": request.form.get('user_full_name'),
             "tlf_num": request.form.get('tlf_num'),
@@ -292,9 +292,12 @@ def api_edit_user(user_id):
 
         return jsonify({'status': 200, 'message': 'User updated successfully', 'data': response.data[0]})
 
-    except Exception as e:
-        print(f"Error updating user: {e}")
-        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+   except Exception as e:
+    print(f"Error updating user: {e}")
+    import traceback
+    traceback.print_exc()
+    return jsonify({'status': 500, 'message': 'Internal Server Error'})
+
         
 @app.route('/about')
 def about():
