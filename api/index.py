@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import json
 from supabase import create_client, Client
 import re 
-import traceback  
+
 app = Flask(__name__)
 
 url = "https://srzradycoulcpkuintfl.supabase.co"
@@ -295,7 +295,7 @@ def api_edit_user(user_id):
 
     except Exception as e:
         print(f"Error updating user: {e}")
-        traceback.print_exc()
+     
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
 
         
