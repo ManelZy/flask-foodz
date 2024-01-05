@@ -85,7 +85,7 @@ def api_users_login():
     return jsonify({'status': 500, 'message': error})
 
 
-@app.route('/users/<string:user_id>', methods=['GET'])
+@app.route('/users/<int:user_id>', methods=['GET'])
 def api_get_user_by_id(user_id):
     try:
         # Fetch user details by user_id
