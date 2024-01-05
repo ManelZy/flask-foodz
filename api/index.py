@@ -261,11 +261,13 @@ def get_restaurant_id(user_id):
         print(f"Error getting restaurant_id: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
         
-        @app.route('/users/<string:user_id>', methods=['PUT'])
+     
+@app.route('/users/<string:user_id>', methods=['PUT'])
 def api_edit_user(user_id):
     try:
         # Check if the dish with the given dish_id exists
         existing_user = supabase.table('users').select("*").eq('user_id', user_id).limit(1).execute()
+
         if not existing_user.data:
             return jsonify({'status': 404, 'message': 'User not found'})
 
@@ -278,16 +280,21 @@ def api_edit_user(user_id):
             "tlf_num": request.form.get('tlf_num'),
         }
 
-        # Update the dish
+        # Perform data validation (you may want to customize this based on your requirements)
+        if any(value is None for value in updated_data.values()):
+            return jsonify({'status': 400, 'message': 'Invalid or missing data'})
+
+        # Update the user
         response = supabase.table('users').update(updated_data).eq('user_id', user_id).execute()
 
         if not response.data:
             return jsonify({'status': 500, 'message': 'Error updating user'})
 
         return jsonify({'status': 200, 'message': 'User updated successfully', 'data': response.data[0]})
+
     except Exception as e:
         print(f"Error updating user: {e}")
-        return jsonify({'status': 500, 'message': 'Error updating user'})
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
         
 @app.route('/about')
 def about():
