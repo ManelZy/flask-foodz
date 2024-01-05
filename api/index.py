@@ -243,6 +243,23 @@ def api_categories_add():
     except Exception as e:
         print(f"Error during category adding: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
+
+@app.route('/users/<int:user_id>/restaurant_id', methods=['GET'])
+def get_restaurant_id(user_id):
+    try:
+        # Query the restaurant table to get the corresponding restaurant_id based on user_id
+        response = supabase.table('restaurant').select("restaurant_id").eq('user_id', user_id).limit(1).execute()
+
+        if response.data:
+            restaurant_id = response.data[0].get('restaurant_id')
+            return jsonify({'status': 200, 'message': '', 'data': {'restaurant_id': restaurant_id}})
+        else:
+            return jsonify({'status': 404, 'message': 'Restaurant not found for the user'})
+
+    except Exception as e:
+        print(f"Error getting restaurant_id: {str(e)}")
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+        
         
 @app.route('/about')
 def about():
