@@ -108,7 +108,7 @@ def api_get_orders():
 
     return jsonify({'status': 200, 'message': '', 'data': orders_with_users})
     
-@app.route('/dishes/<string:restaurant_id>', methods=['GET'])
+@app.route('/dishes/<string:restaurant_id>/restaurant_id', methods=['GET'])
 def api_get_dishes(restaurant_id):
     dishes = supabase.table('dishes').select("*").eq('restaurant_id', restaurant_id).execute().data
     return jsonify({'status': 200, 'message': '', 'data': dishes})
