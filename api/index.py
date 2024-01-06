@@ -92,7 +92,7 @@ def api_get_users(user_id):
 
 
 @app.route('/orders/<string:restaurant_id>/restaurant_id', methods=['GET'])
-def api_get_orders():
+def api_get_orders(restaurant_id):
     orders = supabase.table('orders').select("*").eq('restaurant_id', restaurant_id).execute().data
 
     # Fetch user details (user_full_name and user_address) for each order
@@ -107,6 +107,7 @@ def api_get_orders():
         orders_with_users.append(order)
 
     return jsonify({'status': 200, 'message': '', 'data': orders_with_users})
+
     
 @app.route('/dishes/<string:restaurant_id>/restaurant_id', methods=['GET'])
 def api_get_dishes(restaurant_id):
