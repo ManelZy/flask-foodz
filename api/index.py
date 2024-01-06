@@ -108,10 +108,11 @@ def api_get_orders():
 
     return jsonify({'status': 200, 'message': '', 'data': orders_with_users})
     
-@app.route('/dishes', methods=['GET'])
-def api_get_dishes():
-    dishes = supabase.table('dishes').select("*").execute().data
+@app.route('/dishes/<string:restaurant_id>', methods=['GET'])
+def api_get_dishes(restaurant_id):
+    dishes = supabase.table('dishes').select("*").eq('restaurant_id', restaurant_id).execute().data
     return jsonify({'status': 200, 'message': '', 'data': dishes})
+
     
 @app.route('/dishes/<int:dish_id>', methods=['DELETE'])
 def api_delete_dish(dish_id):
