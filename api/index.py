@@ -218,9 +218,9 @@ def api_dishes_add():
         print(f"Error during dish adding: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
 
-@app.route('/categories', methods=['GET'])
-def api_get_categories():
-    categories = supabase.table('categories').select("*").execute().data
+@app.route('/categories/<string:restaurant_id>/restaurant_id', methods=['GET'])
+def api_get_categories(restaurant_id):
+    categories = supabase.table('categories').select("*").eq('restaurant_id', restaurant_id).execute().data
     return jsonify({'status': 200, 'message': '', 'data': categories})
 
 @app.route('/categories.add', methods=['POST'])
