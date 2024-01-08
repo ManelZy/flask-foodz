@@ -227,11 +227,13 @@ def api_get_categories(restaurant_id):
 def api_categories_add():
     try:
         category_name = request.form.get('category_name')
+        restaurant_id = request.form.get('restaurant_id')
     
 
         # Insert the new store
         response = supabase.table('categories').insert({
             "category_name": category_name,
+            "restaurant_id": restaurant_id,
             
         }).execute()
 
