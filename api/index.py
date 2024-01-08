@@ -220,10 +220,31 @@ def api_dishes_add():
         print(f"Error during dish adding: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
         
-@app.route('/dishes/<string:dish_id>/dish_id', methods=['GET'])
-def api_get_dish(dish_id):
-    dish = supabase.table('dishes').select("*").eq('restaurant_id', restaurant_id).execute().data
-    return jsonify({'status': 200, 'message': '', 'data': dish})
+@app.route('/dishes/<int:dish_id>/dish_id', methods=['GET'])
+def api_get_dishes_byid(dish_id):
+    try:
+        dish_response = supabase.table('dishes').select("*").eq('dish_id', dish_id).limit(1).execute()
+        dish_data = dish_response.data[0] if dish_response.data else None
+
+        if dish_data:
+            # Extract relevant information from dish_data
+            dish = {
+                "dishId": dish_data.get('dish_id'),
+                "name": dish_data.get('dish_name'),
+                "description": dish_data.get('dish_desc'),
+                "price": dish_data.get('dish_price'),
+                "imagePath": dish_data.get('dish_img'),
+                "category": dish_data.get('dish_category'),
+            }
+
+            return jsonify({'status': 200, 'message': '', 'data': dish})
+        else:
+            return jsonify({'status': 404, 'message': 'Dish not found'})
+
+    except Exception as e:
+        print(f"Error fetching dish: {str(e)}")
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+
     
 @app.route('/categories/<string:restaurant_id>/restaurant_id', methods=['GET'])
 def api_get_categories(restaurant_id):
