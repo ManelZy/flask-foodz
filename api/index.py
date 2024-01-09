@@ -257,7 +257,7 @@ def api_get_orderitems_byid(order_id):
                 item = {
                     "orderItemId": item_data.get('order_item'),
                     "itemQuantity": item_data.get('item_quantity'),
-                    "dish_id": item_data.get('dish_id'),
+                    "dishId": item_data.get('dish_id'),
                 }
                 items.append(item)
 
