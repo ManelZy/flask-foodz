@@ -351,7 +351,7 @@ def api_edit_user(user_id):
      
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
 
-        @app.route('/orderstatus/<int:order_id>', methods=['PUT'])
+       
 
 
 @app.route('/about')
