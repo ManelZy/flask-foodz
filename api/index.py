@@ -248,7 +248,7 @@ def api_get_dishes_byid(dish_id):
 @app.route('/orderitems/<int:order_id>/order_id', methods=['GET'])
 def api_get_orderitems_byid(order_id):
     try:
-        items_response = supabase.table('dish_items').select("*").eq('order_id', order_id).execute().data
+        items_response = supabase.table('order_items').select("*").eq('order_id', order_id).execute().data
 
         if items_response:
             # Extract relevant information from item_data for each item
