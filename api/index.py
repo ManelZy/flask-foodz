@@ -244,6 +244,29 @@ def api_get_dishes_byid(dish_id):
     except Exception as e:
         print(f"Error fetching dish: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
+        
+@app.route('/orderitems/<int:order_id>/order_id', methods=['GET'])
+def api_get_orderitems_byid(order_id):
+    try:
+        items_response = supabase.table('dish_items').select("*").eq('order_id', order_id).execute().data
+
+        if items_response:
+            # Extract relevant information from item_data for each item
+            items = []
+            for item_data in items_response:
+                item = {
+                    "orderItemId": item_data.get('order_item'),
+                    "itemQuantity": item_data.get('item_quantity'),
+                }
+                items.append(item)
+
+            return jsonify({'status': 200, 'message': '', 'data': items})
+        else:
+            return jsonify({'status': 404, 'message': 'Order not found'})
+
+    except Exception as e:
+        print(f"Error fetching items: {str(e)}")
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
 
     
 @app.route('/categories/<string:restaurant_id>/restaurant_id', methods=['GET'])
