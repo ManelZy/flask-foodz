@@ -387,7 +387,38 @@ def update_order_status(order_id):
         # Log the error details to a secure location
         app.logger.error(f"Error updating order status: {e}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
+        
+@app.route('/rest/<string:restaurant_id>', methods=['PUT'])
+def api_edit_rest(restaurant_id):
+    try:
+        # Check if the user with the given user_id exists
+        existing_rest = supabase.table('restaurant').select("*").eq('restaurant_id', user_id).limit(1).execute()
 
+        if not existing_rest.data:
+            return jsonify({'status': 404, 'message': 'User not found'})
+
+        # Get the updated data from the request
+        updated_data = {
+            "store_name": request.form.get('store_name'),
+            "store_address": request.form.get('store_address'),
+            "phone_num": request.form.get('phone_num'),
+            "business": request.form.get('business'),
+        }
+
+       
+        # Update the user
+        response = supabase.table('restaurant').update(updated_data).eq('restaurant_id', restaurant_id).execute()
+
+        if not response.data:
+            return jsonify({'status': 500, 'message': 'Error updating user'})
+
+        return jsonify({'status': 200, 'message': 'User updated successfully', 'data': response.data[0]})
+
+    except Exception as e:
+        print(f"Error updating user: {e}")
+     
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+        
 @app.route('/about')
 def about():
     return 'About'
