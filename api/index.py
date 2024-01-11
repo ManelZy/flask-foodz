@@ -418,6 +418,32 @@ def api_edit_rest(restaurant_id):
         print(f"Error updating user: {e}")
      
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
+
+@app.route('/rest.info/<string:restaurant_id>', methods=['GET'])
+def api_get_restaurant_info(restaurant_id):
+    try:
+        # Query the restaurant table to get the corresponding restaurant information based on restaurant_id
+        response = supabase.table('restaurant').select("*").eq('restaurant_id', restaurant_id).limit(1).execute()
+        rest_data = response.data[0] if response.data else None
+
+        if rest_data:
+            # Extract relevant information from restaurant_data
+            restaurant_info = {
+                "restaurant_id": rest_data.get('restaurant_id'),
+                "store_name": rest_data.get('store_name'),
+                "store_address": rest_data.get('store_address'),
+                "phone_num": rest_data.get('phone_num'),
+                "business": rest_data.get('business'),
+            }
+
+            return jsonify({'status': 200, 'message': '', 'data': restaurant_info})
+        else:
+            return jsonify({'status': 404, 'message': 'Restaurant not found'})
+
+    except Exception as e:
+        print(f"Error getting restaurant info: {str(e)}")
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
+
         
 @app.route('/about')
 def about():
