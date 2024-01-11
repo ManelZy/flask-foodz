@@ -305,10 +305,16 @@ def api_categories_add():
 def get_restaurant_id(user_id):
     try:
         # Query the restaurant table to get the corresponding restaurant_id based on user_id
-        response = supabase.table('restaurant').select("restaurant_id").eq('user_id', user_id).limit(1).execute()
+        response = supabase.table('restaurant').select("*").eq('user_id', user_id).limit(1).execute()
 
         if response.data:
             restaurant_id = response.data[0].get('restaurant_id')
+            store_name = response.data[0].get('store_name')
+            store_address = response.data[0].get('store_address')
+            phone_num = response.data[0].get('phone_num')
+            business = response.data[0].get('business')
+            
+            
             return jsonify({'status': 200, 'message': '', 'data': {'restaurant_id': restaurant_id}})
         else:
             return jsonify({'status': 404, 'message': 'Restaurant not found for the user'})
