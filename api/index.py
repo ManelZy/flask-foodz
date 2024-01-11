@@ -311,11 +311,11 @@ def get_restaurant_id(user_id):
         if rest_data:
             # Extract relevant information from dish_data
             rest = {
-            "restaurant_id": rest_data.data.get('restaurant_id')
-            "store_name": rest_data.data.get('store_name')
-            "store_address": rest_data.data.get('store_address')
-            "phone_num": rest_data.data.get('phone_num')
-            "business": rest_data.data.get('business')
+            "restaurant_id": rest_data.get('restaurant_id')
+            "store_name": rest_data.get('store_name')
+            "store_address": rest_data.get('store_address')
+            "phone_num": rest_data.get('phone_num')
+            "business": rest_data.get('business')
             }
             
             return jsonify({'status': 200, 'message': '', 'data': rest })
