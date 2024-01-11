@@ -392,7 +392,7 @@ def update_order_status(order_id):
 def api_edit_rest(restaurant_id):
     try:
         # Check if the user with the given user_id exists
-        existing_rest = supabase.table('restaurant').select("*").eq('restaurant_id', user_id).limit(1).execute()
+        existing_rest = supabase.table('restaurant').select("*").eq('restaurant_id', restaurant_id).limit(1).execute()
 
         if not existing_rest.data:
             return jsonify({'status': 404, 'message': 'User not found'})
