@@ -443,6 +443,32 @@ def api_get_restaurant_info(restaurant_id):
     except Exception as e:
         print(f"Error getting restaurant info: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
+        
+@app.route('/user.info/<string:user_id>', methods=['GET'])
+def api_get_user_info(user_id):
+    try:
+        # Query the restaurant table to get the corresponding restaurant information based on restaurant_id
+        response = supabase.table('users').select("*").eq('user_id', user_id).limit(1).execute()
+        res_data = response.data[0] if response.data else None
+
+        if rest_data:
+            # Extract relevant information from restaurant_data
+            user_info = {
+                "user_id": res_data.get('user_id'),
+                "user_full_name": res_data.get('user_full_name'),
+                "user_address": res_data.get('user_address'),
+                "tlf_num": res_data.get('tlf_num'),
+                "user_email": res_data.get('user_email'),
+                "pass": res_data.get('pass'),
+            }
+
+            return jsonify({'status': 200, 'message': '', 'data':user_info})
+        else:
+            return jsonify({'status': 404, 'message': 'Restaurant not found'})
+
+    except Exception as e:
+        print(f"Error getting restaurant info: {str(e)}")
+        return jsonify({'status': 500, 'message': 'Internal Server Error'})
 
         
 @app.route('/about')
