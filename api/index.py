@@ -451,7 +451,7 @@ def api_get_user_info(user_id):
         response = supabase.table('users').select("*").eq('user_id', user_id).limit(1).execute()
         res_data = response.data[0] if response.data else None
 
-        if rest_data:
+        if res_data:
             # Extract relevant information from restaurant_data
             user_info = {
                 "user_id": res_data.get('user_id'),
