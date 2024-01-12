@@ -458,7 +458,7 @@ def api_get_user_info(user_id):
                 "user_full_name": res_data.get('user_full_name'),
                 "user_address": res_data.get('user_address'),
                 "tlf_num": res_data.get('tlf_num'),
-                "user_email": res_data.get('user_email'),
+                "email": res_data.get('email'),
                 "pass": res_data.get('pass'),
             }
 
