@@ -476,7 +476,7 @@ def api_get_user_info(user_id):
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
 
 
-@app.route('/getPopularDishes/<int:restaurant_id>', methods=['GET'])
+@app.route('/getPopularDishes/<string:restaurant_id>', methods=['GET'])
 def get_popular_dishes(restaurant_id):
     try:
         # Retrieve order_items data for the specified restaurant_id
