@@ -94,7 +94,9 @@ def api_get_users(user_id):
 
 @app.route('/orders/<string:restaurant_id>/restaurant_id', methods=['GET'])
 def api_get_orders(restaurant_id):
-    orders = supabase.table('orders').select("*").eq('restaurant_id', restaurant_id).execute().data
+    # Assuming the orders have an 'order_date' field representing the order date
+    today = datetime.now().date().isoformat()
+    orders = supabase.table('orders').select("*").eq('restaurant_id', restaurant_id).eq('order_date', today).execute().data
 
     # Fetch user details (user_full_name and user_address) for each order
     orders_with_users = []
