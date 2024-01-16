@@ -498,7 +498,7 @@ def get_popular_dishes(restaurant_id):
             # Filter dishes with count > 10
             popular_dishes = []
             for dish_id, count in dish_counts.items():
-                if count > 7:
+                if count > 0:
                     # Retrieve dish details based on dish_id
                     dish_response = supabase.table('dishes').select('*').eq('dish_id', dish_id).limit(1).execute()
 
