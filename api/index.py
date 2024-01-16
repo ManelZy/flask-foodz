@@ -475,6 +475,51 @@ def api_get_user_info(user_id):
         print(f"Error getting restaurant info: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
 
+
+@app.route('/getPopularDishes/<int:restaurant_id>', methods=['GET'])
+def get_popular_dishes(restaurant_id):
+    try:
+        # Retrieve order_items data for the specified restaurant_id
+        order_items_response = supabase.table('order_items').select('dish_id').eq('restaurant_id', restaurant_id).execute()
+
+        if order_items_response.data:
+            # Assuming the result is a list of dictionaries
+            order_items_data = order_items_response.data
+
+            # Count occurrences of each dish_id in order_items
+            dish_counts = {}
+            for order_item_data in order_items_data:
+                dish_id = order_item_data['dish_id']
+                if dish_id not in dish_counts:
+                    dish_counts[dish_id] = 1
+                else:
+                    dish_counts[dish_id] += 1
+
+            # Filter dishes with count > 10
+            popular_dishes = []
+            for dish_id, count in dish_counts.items():
+                if count > 7:
+                    # Retrieve dish details based on dish_id
+                    dish_response = supabase.table('dishes').select('*').eq('dish_id', dish_id).limit(1).execute()
+
+                    if dish_response.data:
+                        dish_details = dish_response.data[0]
+                        popular_dishes.append({
+                            'dish_id': dish_details['dish_id'],
+                            'dish_name': dish_details['dish_name'],
+                            'dish_img': dish_details['dish_img'],
+                            # Add other attributes as needed
+                        })
+
+            # Return popular dishes data as JSON
+            return jsonify(popular_dishes)
+        else:
+            # Return an error response if no data found
+            return jsonify({'error': 'No data found'}), 404
+
+    except Exception as e:
+        # Handle database query errors
+        return jsonify({'error': f'Database error: {str(e)}'}), 500
         
 @app.route('/about')
 def about():
