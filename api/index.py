@@ -505,10 +505,10 @@ def get_popular_dishes(restaurant_id):
                     if dish_response.data:
                         dish_details = dish_response.data[0]
                         popular_dishes.append({
-                            'dish_id': dish_details['dish_id'],
-                            'dish_name': dish_details['dish_name'],
-                            'dish_img': dish_details['dish_img'],
-                            'count': int(count),
+                            "dish_id": dish_details['dish_id'],
+                            "dish_name": dish_details['dish_name'],
+                            "dish_img": dish_details['dish_img'],
+                            "count":count,
 
                         })
 
