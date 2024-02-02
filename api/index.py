@@ -11,7 +11,7 @@ app = Flask(__name__)
 url = "https://srzradycoulcpkuintfl.supabase.co"
 key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyenJhZHljb3VsY3BrdWludGZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDI2Njc1ODEsImV4cCI6MjAxODI0MzU4MX0.GHF3XHbwbhhGFu7T4Y_E-tN39ebNCbKW1srbLurp6D0"
 supabase: Client = create_client(url, key)
-BUCKET_NAME = 'uploads' 
+
 
 @app.route('/users.signup', methods=['POST'])
 def api_users_signup():
@@ -207,16 +207,6 @@ def api_dishes_add():
         dish_category = request.form.get('dish_category') 
         restaurant_id = request.form.get('restaurant_id') 
         dish_img = request.form.get('dish_img')  
-       
-        dish_image = base64.b64decode(dish_img)
-        
-        # Specify the desired storage path within the bucket
-        storage_path = 'images/temp_image.jpg'
-        
-        # Use the storage client for uploading the file
-        response = supabase.storage.from_('uploads').upload(file=dish_image, path=storage_path)
-
-
         # Insert the new store
         response = supabase.table('dishes').insert({
             "dish_name": dish_name,
