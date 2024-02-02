@@ -526,11 +526,11 @@ def get_popular_dishes(restaurant_id):
 def get_order_statistics(restaurant_id):
     try:
         # Retrieve the number of orders and total price for the specified restaurant_id with order_status 'Accepted' or 'Completed'
-        order_count_response = supabase.table('orders').select('id').eq('restaurant_id', restaurant_id).eq('order_status', 'Accepted').or_(
-            'order_status', 'Completed').execute()
+        order_count_response = supabase.table('orders').select('id').eq('restaurant_id', restaurant_id).or_(
+            'order_status.eq.Accepted', 'order_status.eq.Completed').execute()
 
-        total_price_response = supabase.table('orders').select('total_price').eq('restaurant_id', restaurant_id).eq('order_status', 'Accepted').or_(
-            'order_status', 'Completed').execute()
+        total_price_response = supabase.table('orders').select('total_price').eq('restaurant_id', restaurant_id).or_(
+            'order_status.eq.Accepted', 'order_status.eq.Completed').execute()
 
         if order_count_response.data and total_price_response.data:
             order_count = len(order_count_response.data)
@@ -543,6 +543,7 @@ def get_order_statistics(restaurant_id):
     except Exception as e:
         # Handle database query errors
         return {'error': f'Database error: {str(e)}'}, 500
+
 
         
 @app.route('/about')
