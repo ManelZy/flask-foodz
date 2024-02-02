@@ -522,6 +522,7 @@ def get_popular_dishes(restaurant_id):
         # Handle database query errors
         return jsonify({'error': f'Database error: {str(e)}'}), 500
         
+@app.route('/getOrdersStats/<string:restaurant_id>', methods=['GET'])
 def get_order_statistics(restaurant_id):
     try:
         # Retrieve the number of orders for the specified restaurant_id
