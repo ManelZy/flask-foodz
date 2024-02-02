@@ -5,12 +5,13 @@ import re
 from datetime import datetime
 import base64
 
+
 app = Flask(__name__)
 
 url = "https://srzradycoulcpkuintfl.supabase.co"
 key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNyenJhZHljb3VsY3BrdWludGZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDI2Njc1ODEsImV4cCI6MjAxODI0MzU4MX0.GHF3XHbwbhhGFu7T4Y_E-tN39ebNCbKW1srbLurp6D0"
 supabase: Client = create_client(url, key)
-
+BUCKET_NAME = 'uploads' 
 
 @app.route('/users.signup', methods=['POST'])
 def api_users_signup():
@@ -210,7 +211,7 @@ def api_dishes_add():
         storage_path = 'temp_image.png'
 
         # Upload the image directly from bytes
-        response = supabase.storage.from('uploads').upload(file=dish_image, path=storage_path)
+        response = supabase.storage.from_file(BUCKET_NAME,dish_image)
 
         # Insert the new store
         response = supabase.table('dishes').insert({
