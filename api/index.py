@@ -526,7 +526,7 @@ def get_popular_dishes(restaurant_id):
 def get_order_statistics(restaurant_id):
     try:
         # Retrieve the number of orders for the specified restaurant_id
-        order_count_response = supabase.table('orders').select('id').eq('restaurant_id', restaurant_id).execute()
+        order_count_response = supabase.table('orders').select('restaurant_id').eq('restaurant_id', restaurant_id).execute()
 
         # Retrieve the total price for the specified restaurant_id
         total_price_response = supabase.table('orders').select('total_price').eq('restaurant_id', restaurant_id).execute()
