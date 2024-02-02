@@ -508,7 +508,7 @@ def get_popular_dishes(restaurant_id):
                             "dish_id": dish_details['dish_id'],
                             "dish_name": dish_details['dish_name'],
                             "dish_img": dish_details['dish_img'],
-                          
+                            "count": count,
 
                         })
 
