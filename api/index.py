@@ -196,6 +196,8 @@ def api_restaurant_signup():
     except Exception as e:
         print(f"Error during store signup: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
+        
+  storage = supabase.storage
 
 @app.route('/dishes.add', methods=['POST'])
 def api_dishes_add():
@@ -209,7 +211,7 @@ def api_dishes_add():
         dish_image = base64.b64decode(dish_img)
         # Specify the desired storage path within the bucket
         storage_path = 'temp_image.png'
-        storage = supabase.storage
+      
         response = storage.from_(BUCKET_NAME).upload(file=dish_image, path=storage_path)
 
 
