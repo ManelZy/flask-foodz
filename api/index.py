@@ -208,6 +208,13 @@ def api_dishes_add():
         restaurant_id = request.form.get('restaurant_id') 
         dish_img = request.form.get('dish_img')  
        
+        dish_image = base64.b64decode(dish_img)
+        
+        # Specify the desired storage path within the bucket
+        storage_path = 'images/temp_image.jpg'
+        
+        # Use the storage client for uploading the file
+        response = storage.from_(BUCKET_NAME).upload(file=dish_image, path=storage_path)
 
 
         # Insert the new store
