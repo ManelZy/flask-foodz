@@ -522,6 +522,27 @@ def get_popular_dishes(restaurant_id):
         # Handle database query errors
         return jsonify({'error': f'Database error: {str(e)}'}), 500
         
+@app.route('/getOrdersStats/<string:restaurant_id>', methods=['GET'])
+def get_order_statistics(restaurant_id):
+    try:
+        # Retrieve the number of orders for the specified restaurant_id
+        order_count_response = supabase.table('orders').select('id').eq('restaurant_id', restaurant_id).execute()
+
+        # Retrieve the total price for the specified restaurant_id
+        total_price_response = supabase.table('orders').select('total_price').eq('restaurant_id', restaurant_id).execute()
+
+        if order_count_response.data and total_price_response.data:
+            order_count = len(order_count_response.data)
+            total_price = sum(order['total_price'] for order in total_price_response.data)
+
+            return {'order_count': order_count, 'total_price': total_price}
+        else:
+            return {'error': 'No data found'}
+
+    except Exception as e:
+        # Handle database query errors
+        return {'error': f'Database error: {str(e)}'}
+        
 @app.route('/about')
 def about():
     return 'About'
