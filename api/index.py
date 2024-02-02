@@ -197,7 +197,7 @@ def api_restaurant_signup():
         print(f"Error during store signup: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
         
-  storage = supabase.storage
+        storage = supabase.storage
 
 @app.route('/dishes.add', methods=['POST'])
 def api_dishes_add():
