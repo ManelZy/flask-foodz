@@ -210,7 +210,7 @@ def api_dishes_add():
         dish_image = base64.b64decode(dish_img)
         # Specify the desired storage path within the bucket
         storage_path = 'temp_image.png'
-        storage = supabase.Storage
+        storage = supabase.storage
         response = storage.from_(BUCKET_NAME).upload(file=dish_image, path=storage_path)
 
 
