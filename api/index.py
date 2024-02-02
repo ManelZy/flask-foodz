@@ -203,6 +203,7 @@ def api_dishes_add():
         dish_price = request.form.get('dish_price')  
         dish_category = request.form.get('dish_category') 
         restaurant_id = request.form.get('restaurant_id') 
+        dish_img = request.form.get('dish_img')  
 
         # Insert the new store
         response = supabase.table('dishes').insert({
@@ -211,6 +212,7 @@ def api_dishes_add():
             "dish_price": dish_price,
            "dish_category": dish_category,
             "restaurant_id": restaurant_id,
+            "dish_img": dish_img,
         }).execute()
 
         print(f"Insert response: {response}")
