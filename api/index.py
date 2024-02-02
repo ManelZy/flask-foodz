@@ -206,6 +206,12 @@ def api_dishes_add():
         restaurant_id = request.form.get('restaurant_id') 
         dish_img = request.form.get('dish_img')  
         dish_image = base64.b64decode(dish_img)
+        # Specify the desired storage path within the bucket
+        storage_path = 'dishes/temp_image.png'
+
+        # Upload the image directly from bytes
+        response = supabase.storage.from_('uploads').upload(file=dish_image, path=storage_path)
+
         # Insert the new store
         response = supabase.table('dishes').insert({
             "dish_name": dish_name,
@@ -213,7 +219,7 @@ def api_dishes_add():
             "dish_price": dish_price,
            "dish_category": dish_category,
             "restaurant_id": restaurant_id,
-            "dish_img": dish_image,
+            "dish_img": dish_img,
         }).execute()
 
         print(f"Insert response: {response}")
