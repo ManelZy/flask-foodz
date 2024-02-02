@@ -214,7 +214,7 @@ def api_dishes_add():
         storage_path = 'images/temp_image.jpg'
         
         # Use the storage client for uploading the file
-        response = storage.from_('uploads').upload(file=dish_image, path=storage_path)
+        response = supabase.storage.from_('uploads').upload(file=dish_image, path=storage_path)
 
 
         # Insert the new store
