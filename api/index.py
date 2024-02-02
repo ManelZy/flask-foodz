@@ -3,6 +3,7 @@ import json
 from supabase import create_client, Client
 import re 
 from datetime import datetime
+import base64
 
 app = Flask(__name__)
 
@@ -204,7 +205,7 @@ def api_dishes_add():
         dish_category = request.form.get('dish_category') 
         restaurant_id = request.form.get('restaurant_id') 
         dish_img = request.form.get('dish_img')  
-
+       dish_image = base64.b64decode(dish_img)
         # Insert the new store
         response = supabase.table('dishes').insert({
             "dish_name": dish_name,
@@ -212,7 +213,7 @@ def api_dishes_add():
             "dish_price": dish_price,
            "dish_category": dish_category,
             "restaurant_id": restaurant_id,
-            "dish_img": dish_img,
+            "dish_img": dish_image,
         }).execute()
 
         print(f"Insert response: {response}")
