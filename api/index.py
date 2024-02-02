@@ -528,8 +528,10 @@ def get_order_statistics(restaurant_id):
        
         order_count_response = supabase.table('orders').select('restaurant_id').eq('restaurant_id', restaurant_id).execute()
 
-        total_price_response = supabase.table('orders').select('total_price').eq('restaurant_id', restaurant_id).execute()
-         total_price_response = total_price_response.eq('order_status', 'Completed').execute()
+         total_price_response = supabase.table('orders').select('total_price') \
+            .eq('restaurant_id', restaurant_id) \
+            .eq('order_status', 'Completed') \
+            .execute()
 
         if order_count_response.data and total_price_response.data:
             order_count = len(order_count_response.data)
