@@ -446,6 +446,8 @@ def api_get_restaurant_info(restaurant_id):
                 "store_address": rest_data.get('store_address'),
                 "phone_num": rest_data.get('phone_num'),
                 "business": rest_data.get('business'),
+                "rest_img": rest_data.get('rest_img'),
+                
             }
 
             return jsonify({'status': 200, 'message': '', 'data': restaurant_info})
