@@ -183,6 +183,7 @@ def api_restaurant_signup():
             "phone_num": phone_num,
             "business": business,
             "user_id": user_id,
+            "rest_img": rest_img,
         }).execute()
 
         print(f"Insert response: {response}")
@@ -412,6 +413,7 @@ def api_edit_rest(restaurant_id):
             "store_address": request.form.get('store_address'),
             "phone_num": request.form.get('phone_num'),
             "business": request.form.get('business'),
+            "rest_img": request.form.get('rest_img'),
         }
 
        
