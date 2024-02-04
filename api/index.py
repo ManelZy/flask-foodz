@@ -176,6 +176,7 @@ def api_restaurant_signup():
         phone_num = request.form.get('phone_num')  
         business = request.form.get('business') 
         user_id = request.form.get('user_id')
+        rest_img = request.form.get('rest_img')
         # Insert the new store
         response = supabase.table('restaurant').insert({
             "store_name": store_name,
