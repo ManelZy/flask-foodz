@@ -518,14 +518,13 @@ def get_popular_dishes(restaurant_id):
                             "dish_name": dish_details['dish_name'],
                             "dish_img": dish_details['dish_img'],
                             "count": count,
-
                         })
 
             # Return popular dishes data as JSON
             return jsonify(popular_dishes)
         else:
-            # Return an error response if no data found
-            return jsonify({'error': 'No data found'}), 404
+            # Return an empty list if no data found
+            return jsonify([])
 
     except Exception as e:
         # Handle database query errors
