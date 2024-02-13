@@ -67,8 +67,13 @@ def api_users_signup():
 def api_users_login():
     email = request.form.get('email')
     password = request.form.get('password')
-    error = None
 
+    # Print or log the email and password
+    print("Email:", email)
+    print("Password:", password)
+
+    # Your existing code continues...
+    error = None
     if not email or len(email) < 5:
         error = 'Email needs to be valid'
 
@@ -84,6 +89,7 @@ def api_users_login():
             error = 'Invalid Email or password'
 
     return jsonify({'status': 401, 'message': error, 'data': {}})
+
     
 @app.route('/users/<string:user_id>', methods=['GET'])
 def api_get_users(user_id):
