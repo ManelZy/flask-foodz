@@ -72,16 +72,17 @@ def api_users_login():
     if not email or len(email) < 5:
         error = 'Email needs to be valid'
 
-    elif not password or len(password) < 5:
+    if not error and (not password or len(password) < 5):
         error = 'Provide a password'
 
-    else:
-        response = supabase.table('users').select("*").eq('email', email).eq('pass', password).execute()
+    if not error:
+        response = supabase.table('users').select("*").ilike('email', email).eq('pass', password).execute()
         if response.data:
             user_data = response.data[0]
             return jsonify({'status': 200, 'message': 'Login successful', 'data': user_data})
-        else:
-            error = 'Invalid Email or password'
+
+    if not error:
+        error = 'Invalid Email or password'
 
     return jsonify({'status': 401, 'message': error, 'data': {}})
 
