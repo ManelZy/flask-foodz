@@ -63,32 +63,24 @@ def api_users_signup():
         print(f"Error during user signup: {str(e)}")
         return jsonify({'status': 500, 'message': 'Internal Server Error'})
         
-@app.route('/users.login', methods=['POST'])
+@app.route('/users.login',methods=['GET','POST'])
 def api_users_login():
-    email = request.form.get('email')
-    password = request.form.get('password')
-
-    # Print or log the email and password
-    print("Email:", email)
-    print("Password:", password)
-
-    # Your existing code continues...
-    error = None
-    if not email or len(email) < 5:
-        error = 'Email needs to be valid'
-
-    elif not password or len(password) < 5:
-        error = 'Provide a password'
-
-    else:
-        response = supabase.table('users').select("*").eq('email', email).eq('pass', password).execute()
-        if response.data:
-            user_data = response.data[0]
-            return jsonify({'status': 200, 'message': 'Login successful', 'data': user_data})
-        else:
-            error = 'Invalid Email or password'
-
-    return jsonify({'status': 401, 'message': error, 'data': {}})
+    email= request.form.get('email')
+    password= request.form.get('password')
+    error =False
+    if (not email) or (len(email)<5): #You can even check with regx
+        error='Email needs to be valid'
+    if (not error) and ( (not password) or (len(password)<5) ):
+        error='Provide a password'        
+    if (not error):    
+        response = supabase.table('users').select("*").ilike('email', email).eq('password',password).execute()
+        if len(response.data)>0:
+            return json.dumps({'status':200,'message':'','data':response.data[0]})
+               
+    if not error:
+         error='Invalid Email or password'        
+    
+    return json.dumps({'status':500,'message':error})  
 
     
 @app.route('/users/<string:user_id>', methods=['GET'])
