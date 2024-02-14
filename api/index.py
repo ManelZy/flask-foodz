@@ -73,7 +73,7 @@ def api_users_login():
     if (not error) and ( (not password) or (len(password)<5) ):
         error='Provide a password'        
     if (not error):    
-        response = supabase.table('users').select("*").ilike('email', email).eq('password',password).execute()
+        response = supabase.table('users').select("*").ilike('email', email).eq('pass',password).execute()
         if len(response.data)>0:
             return json.dumps({'status':200,'message':'','data':response.data[0]})
                
